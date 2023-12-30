@@ -12,6 +12,11 @@ $router->add('/', ['controller' => 'home', 'action' => 'index']);
 
 $params = $router->match($path);
 
+if (! $params) {
+    echo '404 Not Found';
+    exit;
+}
+
 $action = $params['action'];
 $controller = $params['controller'];
 

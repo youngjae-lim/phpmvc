@@ -2,9 +2,12 @@
 
 $path = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
 
-require_once '../src/router.php';
+spl_autoload_register(function (string $className) {
+    $className = str_replace('\\', '/', $className);
+    require "../src/$className.php";
+});
 
-$router = new Router;
+$router = new Framework\Router;
 
 $router->add('/home/index', ['controller' => 'home', 'action' => 'index']);
 $router->add('/products', ['controller' => 'products', 'action' => 'index']);
@@ -18,9 +21,7 @@ if (! $params) {
 }
 
 $action = $params['action'];
-$controller = $params['controller'];
-
-require_once "../src/controllers/$controller.php";
+$controller = "App\Controllers\\".ucwords($params['controller']);
 
 $controllerObj = new $controller;
 

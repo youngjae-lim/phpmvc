@@ -58,9 +58,13 @@ class Dispatcher
 
         $controller = str_replace('-', '', ucwords(strtolower($controller), '-'));
 
-        $namespace = "App\Controllers\\";
+        $namespace = "App\Controllers";
 
-        return $namespace.$controller;
+        if (array_key_exists('namespace', $params)) {
+            $namespace .= '\\'.$params['namespace'];
+        }
+
+        return $namespace.'\\'.$controller;
     }
 
     /**

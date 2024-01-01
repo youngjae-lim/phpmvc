@@ -21,7 +21,8 @@ class Dispatcher
             exit;
         }
         $action = $params['action'];
-        $controller = "App\Controllers\\".ucwords($params['controller']);
+        $controller = $this->getControllerName($params);
+        var_dump($controller);
         $controllerObj = new $controller;
 
         $args = $this->getActionArguments($controller, $action, $params);
@@ -29,6 +30,9 @@ class Dispatcher
         $controllerObj->$action(...$args);
     }
 
+    /**
+     * Get the arguments for the controller action
+     */
     private function getActionArguments(string $controller, string $action, array $params): array
     {
         $args = [];
@@ -42,5 +46,19 @@ class Dispatcher
         }
 
         return $args;
+    }
+
+    /**
+     * Convert the route controller name to a class name
+     */
+    private function getControllerName(array $params): string
+    {
+        $controller = $params['controller'];
+
+        $controller = str_replace('-', '', ucwords(strtolower($controller), '-'));
+
+        $namespace = "App\Controllers\\";
+
+        return $namespace.$controller;
     }
 }

@@ -27,6 +27,7 @@ class Router
      */
     public function match(string $path): array|bool
     {
+        $path = urldecode($path);
         $path = trim($path, '/');
 
         foreach ($this->routes as $route) {
@@ -58,17 +59,23 @@ class Router
         $segments = explode('/', $routePath);
 
         // Convert route path segments to regex pattern
-        // e.g. '/{controller}/{action}' => '(?<controller>[a-z]+)/(?<action>[a-z]+)'
+        // e.g. '/product/slug:[\w-]+' => 'product/?<slug>[\w-]+'
+        // e.g. '/{controller}/{id:\d+}/{action}' => '(?<controller>[^/]*)/(?<id>\d+)/(?<action>[^/]*)'
         // e.g. '/products' => 'products'
         // e.g. '/home/index' => 'home/index'
+        // e.g. '/{controller}/{action}' => '(?<controller>[^/]*)/(?<action>[^/]*)'
         $segments = array_map(function (string $segment): string {
             if (preg_match("#^\{([a-z][a-z0-9]*)\}$#", $segment, $matches)) {
-                $segment = '(?<'.$matches[1].'>[a-z]+)';
+                return '(?<'.$matches[1].'>[^/]*)';
+            }
+
+            if (preg_match("#^\{([a-z][a-z0-9]*):(.+)\}$#", $segment, $matches)) {
+                return '(?<'.$matches[1].'>'.$matches[2].')';
             }
 
             return $segment;
         }, $segments);
 
-        return '#^'.implode('/', $segments).'$#';
+        return '#^'.implode('/', $segments).'$#iu';
     }
 }

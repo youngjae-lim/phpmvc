@@ -10,6 +10,7 @@ spl_autoload_register(function (string $className) {
 $router = new Framework\Router;
 
 // Add the most specific routes first
+$router->add('/{title}/{id:\d+}/{page:\d+}', ['controller' => 'products', 'action' => 'showPage']);
 $router->add("/product/{slug:[\w-]+}", ['controller' => 'products', 'action' => 'show']);
 $router->add('/{controller}/{id:\d+}/{action}');
 $router->add('/home/index', ['controller' => 'home', 'action' => 'index']);

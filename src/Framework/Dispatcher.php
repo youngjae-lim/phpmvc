@@ -20,9 +20,8 @@ class Dispatcher
             echo '404 Not Found';
             exit;
         }
-        $action = $params['action'];
+        $action = $this->getActionName($params);
         $controller = $this->getControllerName($params);
-        var_dump($controller);
         $controllerObj = new $controller;
 
         $args = $this->getActionArguments($controller, $action, $params);
@@ -49,7 +48,9 @@ class Dispatcher
     }
 
     /**
-     * Convert the route controller name to a class name
+     * Convert the route controller name to a class name (StudlyCpas)
+     *
+     * Example: my-controller => MyController
      */
     private function getControllerName(array $params): string
     {
@@ -60,5 +61,20 @@ class Dispatcher
         $namespace = "App\Controllers\\";
 
         return $namespace.$controller;
+    }
+
+    /**
+     * Convert the route action name to a method name (camelCase)
+     *
+     * Example: index => index
+     * Example: add-new => addNew
+     * Example: show-all => showAll
+     */
+    private function getActionName(array $params): string
+    {
+        $action = $params['action'];
+
+        return lcfirst(str_replace('-', '', ucwords(strtolower($action), '-')));
+
     }
 }

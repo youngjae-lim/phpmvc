@@ -15,7 +15,7 @@ class Products
 
         $viewer = new Viewer;
 
-        echo $viewer->render('products_index.php', [
+        echo $viewer->render('Products/index.php', [
             'products' => $products,
         ]);
 
@@ -23,8 +23,11 @@ class Products
 
     public function show(string $id)
     {
-        echo "ID: $id<br>";
-        require_once '../views/products_show.php';
+        $viewer = new Viewer;
+
+        echo $viewer->render('Products/show.php', [
+            'id' => $id,
+        ]);
     }
 
     public function showPage(string $title, string $id, string $page)

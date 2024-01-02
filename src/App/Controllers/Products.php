@@ -3,6 +3,7 @@
 namespace App\Controllers;
 
 use App\Models\Product;
+use Framework\Viewer;
 
 class Products
 {
@@ -12,7 +13,12 @@ class Products
 
         $products = $model->getData();
 
-        require_once '../views/products_index.php';
+        $viewer = new Viewer;
+
+        $viewer->render('products_index.php', [
+            'products' => $products,
+        ]);
+
     }
 
     public function show(string $id)

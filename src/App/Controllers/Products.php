@@ -15,7 +15,9 @@ class Products
 
         $viewer = new Viewer;
 
-        echo $viewer->render('shared/header.php');
+        echo $viewer->render('shared/header.php', [
+            'title' => 'Products',
+        ]);
 
         echo $viewer->render('Products/index.php', [
             'products' => $products,
@@ -27,7 +29,9 @@ class Products
     {
         $viewer = new Viewer;
 
-        echo $viewer->render('shared/header.php');
+        echo $viewer->render('shared/header.php', [
+            'title' => "Product {$id}",
+        ]);
 
         echo $viewer->render('Products/show.php', [
             'id' => $id,

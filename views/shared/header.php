@@ -2,6 +2,6 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-        <title>Product</title>
+<title><?= $title ?></title>
 </head>
 <body>

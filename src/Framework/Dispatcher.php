@@ -24,23 +24,9 @@ class Dispatcher
         $action = $this->getActionName($params);
         $controller = $this->getControllerName($params);
 
-        $reflector = new ReflectionClass($controller);
-        $constructor = $reflector->getConstructor();
-
-        $dependencies = [];
-
-        if ($constructor !== null) {
-            foreach ($constructor->getParameters() as $parameter) {
-                $type = (string) $parameter->getType();
-
-                $dependencies[] = new $type;
-
-            }
-        }
-
-        $controllerObj = new $controller(...$dependencies);
-
         $args = $this->getActionArguments($controller, $action, $params);
+
+        $controllerObj = $this->getObject($controller);
 
         $controllerObj->$action(...$args);
     }
@@ -96,5 +82,32 @@ class Dispatcher
 
         return lcfirst(str_replace('-', '', ucwords(strtolower($action), '-')));
 
+    }
+
+    /**
+     * Get an object instance of the given class name and inject any dependencies
+     */
+    private function getObject(string $className): object
+    {
+
+        $reflector = new ReflectionClass($className);
+        $constructor = $reflector->getConstructor();
+
+        $dependencies = [];
+
+        if ($constructor === null) {
+
+            return new $className;
+        }
+
+        foreach ($constructor->getParameters() as $parameter) {
+            $type = (string) $parameter->getType();
+
+            // Recursively get the dependencies of the dependencies
+            $dependencies[] = $this->getObject($type);
+
+        }
+
+        return new $className(...$dependencies);
     }
 }

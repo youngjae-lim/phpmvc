@@ -7,6 +7,10 @@ use PDO;
 
 class Product
 {
+    public function __construct(private Database $database)
+    {
+    }
+
     public function getData(): array
     {
         $database = new Database;

@@ -1,5 +1,8 @@
 <?php
 
+// Must be at the top of the file. This will enable strict typing mode.
+declare(strict_types=1);
+
 namespace Framework;
 
 use Closure;
@@ -56,7 +59,7 @@ class Container
             }
 
             // Recursively get the dependencies of the dependencies
-            $dependencies[] = $this->get($type);
+            $dependencies[] = $this->get((string) $type);
 
         }
 

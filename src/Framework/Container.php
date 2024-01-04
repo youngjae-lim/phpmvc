@@ -2,6 +2,7 @@
 
 namespace Framework;
 
+use Closure;
 use ReflectionClass;
 
 class Container
@@ -11,7 +12,7 @@ class Container
     /**
      * Register an object instance in the container
      */
-    public function set(string $name, $value): void
+    public function set(string $name, Closure $value): void
     {
         $this->registry[$name] = $value;
     }
@@ -22,7 +23,7 @@ class Container
     public function get(string $className): object
     {
         if (array_key_exists($className, $this->registry)) {
-            return $this->registry[$className];
+            return $this->registry[$className]();
         }
 
         $reflector = new ReflectionClass($className);

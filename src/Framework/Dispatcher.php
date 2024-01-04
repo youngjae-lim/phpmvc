@@ -2,12 +2,11 @@
 
 namespace Framework;
 
-use ReflectionClass;
 use ReflectionMethod;
 
 class Dispatcher
 {
-    public function __construct(private Router $router)
+    public function __construct(private Router $router, private Container $container)
     {
     }
 
@@ -26,7 +25,7 @@ class Dispatcher
 
         $args = $this->getActionArguments($controller, $action, $params);
 
-        $controllerObj = $this->getObject($controller);
+        $controllerObj = $this->container->get($controller);
 
         $controllerObj->$action(...$args);
     }
@@ -82,32 +81,5 @@ class Dispatcher
 
         return lcfirst(str_replace('-', '', ucwords(strtolower($action), '-')));
 
-    }
-
-    /**
-     * Get an object instance of the given class name and inject any dependencies
-     */
-    private function getObject(string $className): object
-    {
-
-        $reflector = new ReflectionClass($className);
-        $constructor = $reflector->getConstructor();
-
-        $dependencies = [];
-
-        if ($constructor === null) {
-
-            return new $className;
-        }
-
-        foreach ($constructor->getParameters() as $parameter) {
-            $type = (string) $parameter->getType();
-
-            // Recursively get the dependencies of the dependencies
-            $dependencies[] = $this->getObject($type);
-
-        }
-
-        return new $className(...$dependencies);
     }
 }

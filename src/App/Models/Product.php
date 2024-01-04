@@ -13,9 +13,7 @@ class Product
 
     public function getData(): array
     {
-        $database = new Database;
-
-        $pdo = $database->getConnection();
+        $pdo = $this->database->getConnection();
 
         $stmt = $pdo->query('SELECT * FROM product');
 

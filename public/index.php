@@ -3,6 +3,14 @@
 // Must be at the top of the file. This will enable strict typing mode.
 declare(strict_types=1);
 
+$showErrors = true;
+
+if ($showErrors) {
+    ini_set('display_errors', '1');
+} else {
+    ini_set('display_errors', '0');
+}
+
 $path = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
 
 if ($path === false) {

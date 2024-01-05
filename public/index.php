@@ -3,7 +3,17 @@
 // Must be at the top of the file. This will enable strict typing mode.
 declare(strict_types=1);
 
+set_error_handler(function (int $errno, string $errstr, string $errfile, int $errline): bool {
+    throw new ErrorException($errstr, 0, $errno, $errfile, $errline);
+});
+
 set_exception_handler(function (Throwable $exception) {
+
+    if ($exception instanceof \Framework\Exceptions\PageNotFoundException) {
+        http_response_code(404);
+    } else {
+        http_response_code(500);
+    }
 
     $showErrors = true;
 

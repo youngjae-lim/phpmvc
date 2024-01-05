@@ -27,6 +27,7 @@ class Container
      */
     public function get(string $className): object
     {
+        // Check if the class name is registered in the container, if so, invoke the closure to get the object instance
         if (array_key_exists($className, $this->registry)) {
             return $this->registry[$className]();
         }
@@ -36,11 +37,13 @@ class Container
 
         $dependencies = [];
 
+        // Check if the class has a constructor
         if ($constructor === null) {
 
             return new $className;
         }
 
+        // Get the constructor parameters
         foreach ($constructor->getParameters() as $parameter) {
             $type = $parameter->getType();
 
@@ -54,7 +57,7 @@ class Container
                 throw new InvalidArgumentException("Constructor parameter '{$parameter->getName()}' in the $className class is an invalid type: '$type' - only single named types supported");
             }
 
-            // Check if the type is a built-in type in PHP
+            // Check if the type is a built-in type like string, int, etc in PHP
             if ($type->isBuiltin()) {
                 throw new InvalidArgumentException("Unable to resolve constructor parameter '{$parameter->getName()}' of type '$type' in the $className class");
             }
@@ -64,6 +67,7 @@ class Container
 
         }
 
+        // Create a new instance of the class and inject the dependencies and return it
         return new $className(...$dependencies);
     }
 }

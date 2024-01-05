@@ -6,6 +6,7 @@ declare(strict_types=1);
 namespace Framework;
 
 use Closure;
+use InvalidArgumentException;
 use ReflectionClass;
 use ReflectionNamedType;
 
@@ -45,17 +46,17 @@ class Container
 
             // Check if the constructor parameter has a type declaration
             if ($type === null) {
-                exit("Constructor parameter '{$parameter->getName()}' in the $className class has no type declaration");
+                throw new InvalidArgumentException("Constructor parameter '{$parameter->getName()}' in the $className class has no type declaration");
             }
 
             // Check if the type is a named type
             if (! $type instanceof ReflectionNamedType) {
-                exit("Constructor parameter '{$parameter->getName()}' in the $className class is an invalid type: '$type' - only single named types supported");
+                throw new InvalidArgumentException("Constructor parameter '{$parameter->getName()}' in the $className class is an invalid type: '$type' - only single named types supported");
             }
 
             // Check if the type is a built-in type in PHP
             if ($type->isBuiltin()) {
-                exit("Unable to resolve constructor parameter '{$parameter->getName()}' of type '$type' in the $className class");
+                throw new InvalidArgumentException("Unable to resolve constructor parameter '{$parameter->getName()}' of type '$type' in the $className class");
             }
 
             // Recursively get the dependencies of the dependencies

@@ -76,8 +76,34 @@ abstract class Model
 
         $stmt = $conn->prepare($sql);
 
-        $stmt->bindValue(1, $data['name'], PDO::PARAM_STR);
-        $stmt->bindValue(2, $data['description'], PDO::PARAM_STR);
+        $i = 1;
+
+        foreach ($data as $value) {
+            $type = match (gettype($value)) {
+                'boolean' => PDO::PARAM_BOOL,
+                'integer' => PDO::PARAM_INT,
+                'null' => PDO::PARAM_NULL,
+                default => PDO::PARAM_STR,
+            };
+
+            // Use switch instead of match for PHP below 8.0.
+            // $valueType = gettype($value);
+            // switch ($valueType) {
+            //     case 'boolean':
+            //         $type = PDO::PARAM_BOOL;
+            //         break;
+            //     case 'integer':
+            //         $type = PDO::PARAM_INT;
+            //         break;
+            //     case 'NULL': // Note that gettype() returns 'NULL' for null values
+            //         $type = PDO::PARAM_NULL;
+            //         break;
+            //     default:
+            //         $type = PDO::PARAM_STR;
+            // }
+
+            $stmt->bindValue($i++, $value, $type);
+        }
 
         return $stmt->execute();
     }

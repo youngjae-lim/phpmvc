@@ -1,4 +1,6 @@
-    <h1>Products</h1>
+<h1>Products</h1>
+
+<a href="/products/new">New Product</a>
 
 <?php foreach ($products as $product) { ?>
     <h2>

@@ -52,4 +52,13 @@ class Products
         echo "ID: $id<br>";
         echo "Page: $page<br>";
     }
+
+    public function new()
+    {
+        echo $this->viewer->render('shared/header.php', [
+            'title' => 'New Product',
+        ]);
+
+        echo $this->viewer->render('Products/new.php');
+    }
 }

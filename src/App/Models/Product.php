@@ -9,5 +9,6 @@ use Framework\Model as BaseModel;
 
 class Product extends BaseModel
 {
-    protected $table = 'product';
+    // Override the table name if it's different from the class name.
+    // protected $table = 'product';
 }

@@ -45,9 +45,7 @@ class ErrorHandler
             $template = '500.php';
         }
 
-        $showErrors = true;
-
-        if ($showErrors) {
+        if ($_ENV['SHOW_ERRORS']) {
             // Turn on error display
             ini_set('display_errors', '1');
         } else {

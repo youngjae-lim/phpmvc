@@ -11,4 +11,13 @@ class Product extends BaseModel
 {
     // Override the table name if it's different from the class name.
     // protected $table = 'product';
+
+    protected function validate(array $data): bool
+    {
+        if (empty($data['name'])) {
+            return false;
+        }
+
+        return true;
+    }
 }

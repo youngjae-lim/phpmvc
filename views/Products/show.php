@@ -1,5 +1,5 @@
-<h1><?= $product['name'] ?></h1>
-<p><?= $product['description'] ?></p>
+<h1><?= htmlspecialchars($product['name']) ?></h1>
+<p><?= htmlspecialchars($product['description']) ?></p>
 
 </body>
 </html>

@@ -6,6 +6,7 @@ declare(strict_types=1);
 namespace App\Controllers;
 
 use App\Models\Product;
+use Framework\Exceptions\PageNotFoundException;
 use Framework\Viewer;
 
 class Products
@@ -31,6 +32,10 @@ class Products
     public function show(string $id)
     {
         $product = $this->model->find($id);
+
+        if (! $product) {
+            throw new PageNotFoundException('Product not found');
+        }
 
         echo $this->viewer->render('shared/header.php', [
             'title' => "Product {$id}",

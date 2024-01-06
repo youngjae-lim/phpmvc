@@ -61,4 +61,15 @@ class Products
 
         echo $this->viewer->render('Products/new.php');
     }
+
+    public function create()
+    {
+        $data = [
+            'name' => $_POST['name'],
+            'description' => $_POST['description'],
+        ];
+
+        var_dump($this->model->insert($data));
+
+    }
 }

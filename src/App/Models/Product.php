@@ -9,4 +9,5 @@ use Framework\Model as BaseModel;
 
 class Product extends BaseModel
 {
+    protected $table = 'product';
 }

@@ -10,6 +10,8 @@ use PDO;
 
 abstract class Model
 {
+    protected $table;
+
     public function __construct(private Database $database)
     {
     }
@@ -18,7 +20,9 @@ abstract class Model
     {
         $pdo = $this->database->getConnection();
 
-        $stmt = $pdo->query('SELECT * FROM product');
+        $sql = "SELECT * FROM {$this->table}";
+
+        $stmt = $pdo->query($sql);
 
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
@@ -27,7 +31,7 @@ abstract class Model
     {
         $conn = $this->database->getConnection();
 
-        $sql = 'SELECT * FROM product WHERE id = :id';
+        $sql = "SELECT * FROM {$this->table} WHERE id = :id";
 
         $stmt = $conn->prepare($sql);
 

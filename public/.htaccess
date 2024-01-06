@@ -1,0 +1,8 @@
+RewriteEngine On
+
+# Redirect all requrests that meet the following conditions
+# (not an existing file, directory or symbolic link) to index.php
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_FILENAME} !-l
+RewriteRule ^ index.php

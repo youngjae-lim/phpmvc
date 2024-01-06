@@ -1,8 +1,4 @@
 RewriteEngine On
-RewriteBase /
 
-# Redirect all requests to /public/index.php
-RewriteRule ^public/index\.php$ - [L]
-RewriteCond %{REQUEST_FILENAME} !-f
-RewriteCond %{REQUEST_FILENAME} !-d
-RewriteRule . /public/index.php [L]
+# Take any request to the website and internally redirect it to the same path, but in the public folder
+RewriteRule (.*) /public/$1

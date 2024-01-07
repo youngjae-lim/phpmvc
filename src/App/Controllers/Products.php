@@ -126,6 +126,18 @@ class Products
                 'errors' => $this->model->getErrors(),
             ]);
         }
+    }
 
+    public function delete(string $id)
+    {
+        $product = $this->getProduct($id);
+
+        echo $this->viewer->render('shared/header.php', [
+            'title' => "Delete Product {$id}",
+        ]);
+
+        echo $this->viewer->render('Products/delete.php', [
+            'product' => $product,
+        ]);
     }
 }

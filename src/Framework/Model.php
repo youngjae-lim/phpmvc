@@ -153,6 +153,57 @@ abstract class Model
             return false;
         }
 
-        return true;
+        $sql = "UPDATE {$this->getTable()} ";
+
+        // Remove the id from the data array.
+        // We don't want to update the id.
+        unset($data['id']);
+
+        $assigments = array_keys($data);
+
+        array_walk($assigments, function (&$value) {
+            $value = "$value = ?";
+        });
+
+        $sql .= 'SET '.implode(', ', $assigments);
+
+        $sql .= ' WHERE id = ?';
+
+        $conn = $this->database->getConnection();
+
+        $stmt = $conn->prepare($sql);
+
+        $i = 1;
+
+        foreach ($data as $value) {
+            $type = match (gettype($value)) {
+                'boolean' => PDO::PARAM_BOOL,
+                'integer' => PDO::PARAM_INT,
+                'null' => PDO::PARAM_NULL,
+                default => PDO::PARAM_STR,
+            };
+
+            // Use switch instead of match for PHP below 8.0.
+            // $valueType = gettype($value);
+            // switch ($valueType) {
+            //     case 'boolean':
+            //         $type = PDO::PARAM_BOOL;
+            //         break;
+            //     case 'integer':
+            //         $type = PDO::PARAM_INT;
+            //         break;
+            //     case 'NULL': // Note that gettype() returns 'NULL' for null values
+            //         $type = PDO::PARAM_NULL;
+            //         break;
+            //     default:
+            //         $type = PDO::PARAM_STR;
+            // }
+
+            $stmt->bindValue($i++, $value, $type);
+        }
+
+        $stmt->bindValue($i, $id, PDO::PARAM_INT);
+
+        return $stmt->execute();
     }
 }

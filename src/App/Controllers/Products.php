@@ -46,6 +46,23 @@ class Products
         ]);
     }
 
+    public function edit(string $id)
+    {
+        $product = $this->model->find($id);
+
+        if (! $product) {
+            throw new PageNotFoundException('Product not found');
+        }
+
+        echo $this->viewer->render('shared/header.php', [
+            'title' => "Edit Product {$id}",
+        ]);
+
+        echo $this->viewer->render('Products/edit.php', [
+            'product' => $product,
+        ]);
+    }
+
     public function showPage(string $title, string $id, string $page)
     {
         echo "Title: $title<br>";

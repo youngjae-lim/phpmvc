@@ -28,7 +28,7 @@ class Router
      *
      * @param  string  $path The route URL
      */
-    public function match(string $path): array|bool
+    public function match(string $path, string $method): array|bool
     {
         $path = urldecode($path);
         $path = trim($path, '/');
@@ -42,6 +42,12 @@ class Router
                 $matches = array_filter($matches, 'is_string', ARRAY_FILTER_USE_KEY);
 
                 $params = array_merge($matches, $route['params']);
+
+                if (array_key_exists('method', $params)) {
+                    if (strtolower($params['method']) !== strtolower($method)) {
+                        continue;
+                    }
+                }
 
                 return $params;
             }

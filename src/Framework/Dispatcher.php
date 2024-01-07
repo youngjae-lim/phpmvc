@@ -17,12 +17,12 @@ class Dispatcher
     /**
      * Handle the request and call the appropriate controller action
      */
-    public function handle(string $path): void
+    public function handle(string $path, string $method): void
     {
-        $params = $this->router->match($path);
+        $params = $this->router->match($path, $method);
 
         if (! $params) {
-            throw new PageNotFoundException("No route matched for $path");
+            throw new PageNotFoundException("No route matched for '$path' with method '$method'");
         }
 
         $controller = $this->getControllerName($params);

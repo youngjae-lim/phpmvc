@@ -7,10 +7,18 @@ namespace App\Controllers;
 
 use App\Models\Product;
 use Framework\Exceptions\PageNotFoundException;
+use Framework\Request;
 use Framework\Viewer;
 
 class Products
 {
+    private Request $request;
+
+    public function setRequest(Request $request): void
+    {
+        $this->request = $request;
+    }
+
     public function __construct(private Viewer $viewer, private Product $model)
     {
     }
@@ -86,8 +94,8 @@ class Products
     public function create()
     {
         $data = [
-            'name' => $_POST['name'],
-            'description' => empty($_POST['description']) ? null : $_POST['description'],
+            'name' => $this->request->post['name'],
+            'description' => empty($this->request->post['description']) ? null : $this->request->post['description'],
         ];
 
         if ($this->model->insert($data)) {
@@ -111,8 +119,8 @@ class Products
         $product = $this->getProduct($id);
 
         // Overwrite the name and description with the new values.
-        $product['name'] = $_POST['name'];
-        $product['description'] = empty($_POST['description']) ? null : $_POST['description'];
+        $product['name'] = $this->request->post['name'];
+        $product['description'] = empty($this->request->post['description']) ? null : $this->request->post['description'];
 
         if ($this->model->update($id, $product)) {
             header("Location: /products/{$id}/show");

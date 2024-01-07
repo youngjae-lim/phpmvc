@@ -16,6 +16,8 @@ abstract class Model
     {
     }
 
+    abstract protected function validate(array $data): bool;
+
     /**
      * Get the table name for the current model.
      */
@@ -67,6 +69,7 @@ abstract class Model
      */
     public function insert(array $data): bool
     {
+        // To use this method, you must implement the validate() method in the child class.
         if (! $this->validate($data)) {
             return false;
         }

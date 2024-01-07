@@ -12,11 +12,39 @@ abstract class Model
 {
     protected $table;
 
+    protected array $errors = [];
+
     public function __construct(private Database $database)
     {
     }
 
-    abstract protected function validate(array $data): bool;
+    protected function validate(array $data): void
+    {
+    }
+
+    /**
+     * Get the ID of the last inserted record.
+     */
+    public function getInsertID(): string
+    {
+        return $this->database->getConnection()->lastInsertId();
+    }
+
+    /**
+     * Add an error message for the given field.
+     */
+    protected function addError(string $field, string $message): void
+    {
+        $this->errors[$field] = $message;
+    }
+
+    /**
+     * Get error messages.
+     */
+    public function getErrors(): array
+    {
+        return $this->errors;
+    }
 
     /**
      * Get the table name for the current model.
@@ -69,8 +97,10 @@ abstract class Model
      */
     public function insert(array $data): bool
     {
-        // To use this method, you must implement the validate() method in the child class.
-        if (! $this->validate($data)) {
+        // To validate the data, please implement the validate() method in the child class.
+        $this->validate($data);
+
+        if (! empty($this->errors)) {
             return false;
         }
 

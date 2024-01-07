@@ -95,6 +95,7 @@ class Products
             ]);
 
             echo $this->viewer->render('Products/new.php', [
+                'product' => $data,
                 'errors' => $this->model->getErrors(),
             ]);
         }
@@ -109,12 +110,11 @@ class Products
             throw new PageNotFoundException('Product not found');
         }
 
-        $data = [
-            'name' => $_POST['name'],
-            'description' => empty($_POST['description']) ? null : $_POST['description'],
-        ];
+        // Overwrite the name and description with the new values.
+        $product['name'] = $_POST['name'];
+        $product['description'] = empty($_POST['description']) ? null : $_POST['description'];
 
-        if ($this->model->update($id, $data)) {
+        if ($this->model->update($id, $product)) {
             header("Location: /products/{$id}/show");
             exit;
         } else {

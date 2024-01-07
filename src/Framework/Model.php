@@ -14,7 +14,7 @@ abstract class Model
 
     protected array $errors = [];
 
-    public function __construct(private Database $database)
+    public function __construct(protected Database $database)
     {
     }
 

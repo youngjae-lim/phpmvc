@@ -36,6 +36,7 @@ class Products
 
         echo $this->viewer->render('Products/index.php', [
             'products' => $products,
+            'total' => $this->model->getTotal(),
         ]);
 
     }

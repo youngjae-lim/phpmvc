@@ -37,6 +37,9 @@ class Dispatcher
         // Inject the request object into the controller
         $controllerObj->setRequest($request);
 
+        // Inject the viewer object into the controller
+        $controllerObj->setViewer($this->container->get(Viewer::class));
+
         // Call the controller action with the arguments
         $controllerObj->$action(...$args);
     }

@@ -70,7 +70,7 @@ class Products
         ];
 
         if ($this->model->insert($data)) {
-            echo 'Product created successfully';
+            echo "Product created successfully - ID: {$this->model->getInsertID()}";
         } else {
             echo $this->viewer->render('shared/header.php', [
                 'title' => 'New Product',

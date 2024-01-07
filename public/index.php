@@ -22,15 +22,10 @@ set_error_handler("Framework\ErrorHandler::handleError");
 
 set_exception_handler("Framework\ErrorHandler::handleException");
 
-$path = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
-$method = $_SERVER['REQUEST_METHOD'];
-
-if ($path === false) {
-    throw new UnexpectedValueException("Malformed URL: '{$_SERVER['REQUEST_URI']}'");
-}
-
 $router = require ROOT_PATH.'/config/routes.php';
 $container = require ROOT_PATH.'/config/services.php';
 
 $dispatcher = new Framework\Dispatcher($router, $container);
-$dispatcher->handle($path, $method);
+$request = new Framework\Request($_SERVER['REQUEST_URI'], $_SERVER['REQUEST_METHOD']);
+
+$dispatcher->handle($request);

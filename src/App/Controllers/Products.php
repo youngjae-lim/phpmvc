@@ -100,4 +100,33 @@ class Products
         }
 
     }
+
+    public function update(string $id)
+    {
+        $product = $this->model->find($id);
+
+        if (! $product) {
+            throw new PageNotFoundException('Product not found');
+        }
+
+        $data = [
+            'name' => $_POST['name'],
+            'description' => empty($_POST['description']) ? null : $_POST['description'],
+        ];
+
+        if ($this->model->update($id, $data)) {
+            header("Location: /products/{$id}/show");
+            exit;
+        } else {
+            echo $this->viewer->render('shared/header.php', [
+                'title' => "Edit Product {$id}",
+            ]);
+
+            echo $this->viewer->render('Products/edit.php', [
+                'product' => $product,
+                'errors' => $this->model->getErrors(),
+            ]);
+        }
+
+    }
 }

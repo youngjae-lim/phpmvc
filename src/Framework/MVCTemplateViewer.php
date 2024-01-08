@@ -54,18 +54,18 @@ class MVCTemplateViewer implements TemplateViewerInterface
     }
 
     /**
-     * Replace the {{ variable }} syntax with PHP code.
+     * Replace the {{ variable }} syntax with PHP code like <?= htmlspecialchars($variable) ?>.
      *
      * @param  string  $code The template code.
      * @return string The template code with the variables replaced with PHP code.
      */
     private function replaceVariables(string $code): string
     {
-        return preg_replace("#{{\s*(\S+)\s*}}#", '<?= htmlspecialchars(\$$1) ?>', $code);
+        return preg_replace("#{{\s*(\S+)\s*}}#", "<?= htmlspecialchars(\$$1 ?? '') ?>", $code);
     }
 
     /**
-     * Replace the {% code %} syntax with PHP code.
+     * Replace the {% code %} syntax with PHP code like <?php code ?>.
      *
      * @param  string  $code The template code.
      * @return string The template code with the PHP code.
@@ -77,6 +77,7 @@ class MVCTemplateViewer implements TemplateViewerInterface
 
     /**
      * Get the blocks from the template.
+     * The block syntax is {% block name %} content {% endblock %}.
      *
      * @param  string  $code The template code.
      * @return array The blocks.
@@ -84,6 +85,7 @@ class MVCTemplateViewer implements TemplateViewerInterface
     private function getBlocks(string $code): array
     {
         $blocks = [];
+
         // s mode: . matches newlines
         // ? mode in the <content> catch-block: non-greedy - each endblock will match the closest block
         preg_match_all('#{% block (?<name>\w+) %}(?<content>.*?){% endblock %}#s', $code, $matches, PREG_SET_ORDER);
@@ -107,9 +109,7 @@ class MVCTemplateViewer implements TemplateViewerInterface
 
         foreach ($matches as $match) {
             $name = $match['name'];
-
             $block = $blocks[$name];
-
             $code = preg_replace("#{% yield $name %}#", $block, $code);
         }
 

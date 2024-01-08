@@ -16,13 +16,23 @@ class MVCTemplateViewer implements TemplateViewerInterface
      */
     public function render(string $template, array $data = []): string|false
     {
+        $code = file_get_contents(dirname(__DIR__, 2)."/views/{$template}");
+
+        $code = $this->replaceVariables($code);
+
+        return $code;
         // Extract the data so we can access it as variables,but don't overwrite
-        extract($data, EXTR_SKIP);
+        // extract($data, EXTR_SKIP);
+        //
+        // ob_start();
+        //
+        // require dirname(__DIR__, 2)."/views/{$template}";
+        //
+        // return ob_get_clean();
+    }
 
-        ob_start();
-
-        require dirname(__DIR__, 2)."/views/{$template}";
-
-        return ob_get_clean();
+    private function replaceVariables(string $code): string
+    {
+        return preg_replace("#{{\s*(\S+)\s*}}#", '<?= htmlspecialchars(\$$1) ?>', $code);
     }
 }

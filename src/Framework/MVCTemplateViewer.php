@@ -63,10 +63,18 @@ class MVCTemplateViewer implements TemplateViewerInterface
         return preg_replace("#{%\s*(.+)\s*%}#", '<?php $1 ?>', $code);
     }
 
+    /**
+     * Get the blocks from the template.
+     *
+     * @param  string  $code The template code.
+     * @return array The blocks.
+     */
     private function getBlocks(string $code): array
     {
         $blocks = [];
-        preg_match_all('#{% block (?<name>\w+) %}(?<content>.*){% endblock %}#', $code, $matches, PREG_SET_ORDER);
+        // s mode: . matches newlines
+        // ? mode: non-greedy - each endblock will match the closest block
+        preg_match_all('#{% block (?<name>\w+) %}(?<content>.*?){% endblock %}#s', $code, $matches, PREG_SET_ORDER);
         foreach ($matches as $match) {
             $blocks[$match['name']] = $match['content'];
         }

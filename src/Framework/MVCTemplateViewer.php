@@ -92,6 +92,7 @@ class MVCTemplateViewer implements TemplateViewerInterface
         // s mode: . matches newlines
         // ? mode in the <content> catch-block: non-greedy - each endblock will match the closest block
         preg_match_all('#{% block (?<name>\w+) %}(?<content>.*?){% endblock %}#s', $code, $matches, PREG_SET_ORDER);
+
         foreach ($matches as $match) {
             $blocks[$match['name']] = $match['content'];
         }

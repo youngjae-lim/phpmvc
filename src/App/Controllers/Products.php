@@ -50,11 +50,7 @@ class Products extends Controller
     {
         $product = $this->getProduct($id);
 
-        echo $this->viewer->render('shared/header.php', [
-            'title' => "Edit Product {$id}",
-        ]);
-
-        echo $this->viewer->render('Products/edit.php', [
+        echo $this->viewer->render('Products/edit.mvc.php', [
             'product' => $product,
         ]);
     }
@@ -102,11 +98,7 @@ class Products extends Controller
             header("Location: /products/{$id}/show");
             exit;
         } else {
-            echo $this->viewer->render('shared/header.php', [
-                'title' => "Edit Product {$id}",
-            ]);
-
-            echo $this->viewer->render('Products/edit.php', [
+            echo $this->viewer->render('Products/edit.mvc.php', [
                 'product' => $product,
                 'errors' => $this->model->getErrors(),
             ]);
@@ -117,11 +109,7 @@ class Products extends Controller
     {
         $product = $this->getProduct($id);
 
-        echo $this->viewer->render('shared/header.php', [
-            'title' => "Delete Product {$id}",
-        ]);
-
-        echo $this->viewer->render('Products/delete.php', [
+        echo $this->viewer->render('Products/delete.mvc.php', [
             'product' => $product,
         ]);
     }

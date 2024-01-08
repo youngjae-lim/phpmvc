@@ -5,7 +5,7 @@ declare(strict_types=1);
 
 namespace Framework;
 
-class MVCTemplateViewer
+class MVCTemplateViewer implements TemplateViewerInterface
 {
     /**
      * Render a template file.

@@ -19,6 +19,7 @@ class MVCTemplateViewer implements TemplateViewerInterface
         $code = file_get_contents(dirname(__DIR__, 2)."/views/{$template}");
 
         $code = $this->replaceVariables($code);
+        $code = $this->replacePHP($code);
 
         // Extract the data so we can access it as variables,but don't overwrite
         extract($data, EXTR_SKIP);
@@ -31,8 +32,25 @@ class MVCTemplateViewer implements TemplateViewerInterface
         return ob_get_clean();
     }
 
+    /**
+     * Replace the {{ variable }} syntax with PHP code.
+     *
+     * @param  string  $code The template code.
+     * @return string The template code with the variables replaced with PHP code.
+     */
     private function replaceVariables(string $code): string
     {
         return preg_replace("#{{\s*(\S+)\s*}}#", '<?= htmlspecialchars(\$$1) ?>', $code);
+    }
+
+    /**
+     * Replace the {% code %} syntax with PHP code.
+     *
+     * @param  string  $code The template code.
+     * @return string The template code with the PHP code.
+     */
+    private function replacePHP(string $code): string
+    {
+        return preg_replace("#{%\s*(.+)\s*%}#", '<?php $1 ?>', $code);
     }
 }

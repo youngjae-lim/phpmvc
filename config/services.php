@@ -10,7 +10,7 @@ $container->set(App\Database::class, function () {
 // Register Framework\PHPTemplateViewer object in the container as a service
 // If you want to use MVCTemplateViewer instead, replace PHPTemplateViewer with MVCTemplateViewer
 $container->set(Framework\TemplateViewerInterface::class, function () {
-    return new Framework\PHPTemplateViewer;
+    return new Framework\MVCTemplateViewer;
 });
 
 return $container;

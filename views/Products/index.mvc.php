@@ -15,8 +15,8 @@
 
 <?php foreach ($products as $product) { ?>
     <h2>
-        <a href="/products/<?= $product['id'] ?>/show">
-            {{ product['name']) }}
+        <a href="/products/{{ product['id'] }}/show">
+            {{ product['name'] }}
         </a>
     </h2>
 <?php } ?>

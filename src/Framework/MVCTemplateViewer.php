@@ -20,15 +20,15 @@ class MVCTemplateViewer implements TemplateViewerInterface
 
         $code = $this->replaceVariables($code);
 
-        return $code;
         // Extract the data so we can access it as variables,but don't overwrite
-        // extract($data, EXTR_SKIP);
-        //
-        // ob_start();
-        //
-        // require dirname(__DIR__, 2)."/views/{$template}";
-        //
-        // return ob_get_clean();
+        extract($data, EXTR_SKIP);
+
+        ob_start();
+
+        // Execute the PHP code in the string.
+        eval('?>'.$code);
+
+        return ob_get_clean();
     }
 
     private function replaceVariables(string $code): string

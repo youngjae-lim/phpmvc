@@ -8,7 +8,7 @@ abstract class Controller
 {
     protected Request $request;
 
-    protected PHPTemplateViewer $viewer;
+    protected TemplateViewerInterface $viewer;
 
     /**
      * Set the request object
@@ -21,7 +21,7 @@ abstract class Controller
     /**
      * Set the viewer object
      */
-    public function setViewer(PHPTemplateViewer $viewer): void
+    public function setViewer(TemplateViewerInterface $viewer): void
     {
         $this->viewer = $viewer;
     }

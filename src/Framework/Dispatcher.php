@@ -38,7 +38,7 @@ class Dispatcher
         $controllerObj->setRequest($request);
 
         // Inject the viewer object into the controller
-        $controllerObj->setViewer($this->container->get(PHPTemplateViewer::class));
+        $controllerObj->setViewer($this->container->get(TemplateViewerInterface::class));
 
         // Call the controller action with the arguments
         $controllerObj->$action(...$args);

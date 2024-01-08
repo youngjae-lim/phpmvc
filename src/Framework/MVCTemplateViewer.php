@@ -34,6 +34,9 @@ class MVCTemplateViewer implements TemplateViewerInterface
             $code = $this->replaceYields($base, $blocks);
         }
 
+        // Replace the {% include "template" %} syntax with the template contents.
+        $code = $this->loadIncludes($views_dir, $code);
+
         // Replace the {{ variable }} syntax with PHP code.
         $code = $this->replaceVariables($code);
 
@@ -111,6 +114,27 @@ class MVCTemplateViewer implements TemplateViewerInterface
             $name = $match['name'];
             $block = $blocks[$name];
             $code = preg_replace("#{% yield $name %}#", $block, $code);
+        }
+
+        return $code;
+    }
+
+    /**
+     * Replace the {% include "template" %} syntax with the template contents.
+     * template is the path to the template file, relative to the views folder.
+     *
+     * @param  string  $viewDir The absolute path to the views folder.
+     * @param  string  $code The template code.
+     * @return string The template code with the includes replaced.
+     */
+    private function loadIncludes(string $viewDir, string $code): string
+    {
+        preg_match_all('#{% include "(?<template>.*?)" %}#', $code, $matches, PREG_SET_ORDER);
+
+        foreach ($matches as $match) {
+            $template = $match['template'];
+            $contents = file_get_contents("{$viewDir}/{$template}");
+            $code = preg_replace("#{% include \"$template\" %}#", $contents, $code);
         }
 
         return $code;

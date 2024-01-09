@@ -18,6 +18,19 @@ class Request
 
     }
 
+    /**
+     * Create a request object from the PHP superglobals and return it
+     *
+     * Access the request object like this:
+     * $request = Request::createFromGlobals();
+     * $request->uri
+     * $request->method
+     * $request->get
+     * $request->post
+     * $request->files
+     * $request->cookie
+     * $request->server
+     */
     public static function createFromGlobals(): static
     {
         return new static(

@@ -35,4 +35,14 @@ abstract class Controller
     {
         $this->response = $response;
     }
+
+    /**
+     * Render a template and set it as the response body and return the response
+     */
+    protected function view(string $template, array $data = []): Response
+    {
+        $this->response->setBody($this->viewer->render($template, $data));
+
+        return $this->response;
+    }
 }

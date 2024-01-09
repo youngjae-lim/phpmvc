@@ -16,9 +16,9 @@ class Dispatcher
     }
 
     /**
-     * Handle the request and call the appropriate controller action
+     * Handle the request and return a response
      */
-    public function handle(Request $request): void
+    public function handle(Request $request): Response
     {
         $path = $this->getPath($request->uri);
         $params = $this->router->match($path, $request->method);
@@ -44,7 +44,7 @@ class Dispatcher
         $controllerObj->setViewer($this->container->get(TemplateViewerInterface::class));
 
         // Call the controller action with the arguments
-        $controllerObj->$action(...$args);
+        return $controllerObj->$action(...$args);
     }
 
     /**

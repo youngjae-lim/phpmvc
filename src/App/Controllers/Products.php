@@ -30,11 +30,12 @@ class Products extends Controller
     {
         $products = $this->model->findAll();
 
-        echo $this->viewer->render('Products/index.mvc.php', [
+        $this->response->setBody($this->viewer->render('Products/index.mvc.php', [
             'products' => $products,
             'total' => $this->model->getTotal(),
-        ]);
+        ]));
 
+        $this->response->send();
     }
 
     public function show(string $id)

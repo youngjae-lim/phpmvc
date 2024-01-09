@@ -37,6 +37,9 @@ class Dispatcher
         // Inject the request object into the controller
         $controllerObj->setRequest($request);
 
+        // Inject the response object into the controller
+        $controllerObj->setResponse($this->container->get(Response::class));
+
         // Inject the viewer object into the controller
         $controllerObj->setViewer($this->container->get(TemplateViewerInterface::class));
 

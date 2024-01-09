@@ -8,6 +8,8 @@ abstract class Controller
 {
     protected Request $request;
 
+    protected Response $response;
+
     protected TemplateViewerInterface $viewer;
 
     /**
@@ -24,5 +26,13 @@ abstract class Controller
     public function setViewer(TemplateViewerInterface $viewer): void
     {
         $this->viewer = $viewer;
+    }
+
+    /**
+     * Set the response object
+     */
+    public function setResponse(Response $response): void
+    {
+        $this->response = $response;
     }
 }

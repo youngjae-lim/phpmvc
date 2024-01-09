@@ -37,37 +37,30 @@ class Products extends Controller
         ]);
     }
 
-    public function show(string $id)
+    public function show(string $id): Response
     {
         $product = $this->getProduct($id);
 
-        echo $this->viewer->render('Products/show.mvc.php', [
+        return $this->view('Products/show.mvc.php', [
             'product' => $product,
         ]);
     }
 
-    public function edit(string $id)
+    public function edit(string $id): Response
     {
         $product = $this->getProduct($id);
 
-        echo $this->viewer->render('Products/edit.mvc.php', [
+        return $this->view('Products/edit.mvc.php', [
             'product' => $product,
         ]);
     }
 
-    public function showPage(string $title, string $id, string $page)
+    public function new(): Response
     {
-        echo "Title: $title<br>";
-        echo "ID: $id<br>";
-        echo "Page: $page<br>";
+        return $this->view('Products/new.mvc.php');
     }
 
-    public function new()
-    {
-        echo $this->viewer->render('Products/new.mvc.php');
-    }
-
-    public function create()
+    public function create(): Response
     {
         $data = [
             'name' => $this->request->post['name'],
@@ -75,10 +68,11 @@ class Products extends Controller
         ];
 
         if ($this->model->insert($data)) {
+            // TODO: revisit
             header("Location: /products/{$this->model->getInsertID()}/show");
             exit;
         } else {
-            echo $this->viewer->render('Products/new.mvc.php', [
+            return $this->view('Products/new.mvc.php', [
                 'product' => $data,
                 'errors' => $this->model->getErrors(),
             ]);
@@ -86,7 +80,7 @@ class Products extends Controller
 
     }
 
-    public function update(string $id)
+    public function update(string $id): Response
     {
         $product = $this->getProduct($id);
 
@@ -95,26 +89,27 @@ class Products extends Controller
         $product['description'] = empty($this->request->post['description']) ? null : $this->request->post['description'];
 
         if ($this->model->update($id, $product)) {
+            // TODO: revisit
             header("Location: /products/{$id}/show");
             exit;
         } else {
-            echo $this->viewer->render('Products/edit.mvc.php', [
+            return $this->view('Products/edit.mvc.php', [
                 'product' => $product,
                 'errors' => $this->model->getErrors(),
             ]);
         }
     }
 
-    public function delete(string $id)
+    public function delete(string $id): Response
     {
         $product = $this->getProduct($id);
 
-        echo $this->viewer->render('Products/delete.mvc.php', [
+        return $this->view('Products/delete.mvc.php', [
             'product' => $product,
         ]);
     }
 
-    public function destroy(string $id): void
+    public function destroy(string $id): Response
     {
         $this->getProduct($id);
 

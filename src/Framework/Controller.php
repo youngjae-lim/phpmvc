@@ -45,4 +45,14 @@ abstract class Controller
 
         return $this->response;
     }
+
+    /**
+     *  Add a redirect header to the response and return the response
+     */
+    protected function redirect(string $url): Response
+    {
+        $this->response->redirect($url);
+
+        return $this->response;
+    }
 }

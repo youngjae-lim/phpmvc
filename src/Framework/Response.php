@@ -10,6 +10,16 @@ class Response
 
     private array $headers = [];
 
+    private int $statusCode = 0;
+
+    /**
+     * Set the response status code
+     */
+    public function setStatusCode(int $statusCode): void
+    {
+        $this->statusCode = $statusCode;
+    }
+
     /**
      * Add a redirect header to the response
      */
@@ -47,6 +57,10 @@ class Response
      */
     public function send(): void
     {
+        if ($this->statusCode) {
+            http_response_code($this->statusCode);
+        }
+
         foreach ($this->headers as $header) {
             header($header);
         }

@@ -8,7 +8,7 @@ $router->add('/{title}/{id:\d+}/{page:\d+}', ['controller' => 'products', 'actio
 $router->add('/product/{slug:[\w-]+}', ['controller' => 'products', 'action' => 'show']);
 
 // $router->add('/{controller}/{id:\d+}/{action}');
-$router->add('/{controller}/{id:\d+}/show', ['action' => 'show']);
+$router->add('/{controller}/{id:\d+}/show', ['action' => 'show', 'middleware' => 'message1|message2']);
 $router->add('/{controller}/{id:\d+}/edit', ['action' => 'edit']);
 $router->add('/{controller}/{id:\d+}/update', ['action' => 'update']);
 $router->add('/{controller}/{id:\d+}/delete', ['action' => 'delete']);

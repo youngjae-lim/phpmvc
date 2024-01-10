@@ -4,13 +4,15 @@ declare(strict_types=1);
 
 namespace App\Middleware;
 
+use Framework\MiddlewareInterface;
 use Framework\Request;
 use Framework\RequestHandlerInferface;
 use Framework\Response;
 
-class ChangeResponseExample2
+class ChangeResponseExample2 implements MiddlewareInterface
 {
     /**
+     * process implements MiddlewareInterface
      * Add a string to the response body
      */
     public function process(Request $request, RequestHandlerInferface $next): Response

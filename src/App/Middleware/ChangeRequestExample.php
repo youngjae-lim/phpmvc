@@ -4,12 +4,17 @@ declare(strict_types=1);
 
 namespace App\Middleware;
 
+use Framework\MiddlewareInterface;
 use Framework\Request;
 use Framework\RequestHandlerInferface;
 use Framework\Response;
 
-class ChangeRequestExample
+class ChangeRequestExample implements MiddlewareInterface
 {
+    /**
+     * process implements MiddlewareInterface
+     * It trims all the post data
+     */
     public function process(Request $request, RequestHandlerInferface $next): Response
     {
         // Trim all the post data

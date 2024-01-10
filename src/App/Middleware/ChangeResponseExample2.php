@@ -8,7 +8,7 @@ use Framework\Request;
 use Framework\RequestHandlerInferface;
 use Framework\Response;
 
-class ChangeResponseExample
+class ChangeResponseExample2
 {
     /**
      * Add a string to the response body
@@ -18,7 +18,7 @@ class ChangeResponseExample
         // Call the next middleware and get the response
         $response = $next->handle($request);
 
-        $response->setBody($response->getBody().' hello from the middleware');
+        $response->setBody($response->getBody().' hello from the middleware 2');
 
         return $response;
     }

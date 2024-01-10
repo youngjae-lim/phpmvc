@@ -7,16 +7,30 @@ namespace Framework;
 class MiddlewareRequestHandler implements RequestHandlerInferface
 {
     public function __construct(
+        // The middlewares are grouped by priority
         private array $middlewares,
+        // The controller request handler is used when there are no more middlewares to process
         private ControllerRequestHandler $controllerHandler
     ) {
     }
 
+    /**
+     * handle implements the RequestHandlerInferface
+     * It processes the middlewares in order of priority
+     * If there are no more middlewares, it lets the controller handle the request
+     * and returns the response
+     */
     public function handle(Request $request): Response
     {
-        // TODO: Use the first middleware for now
-        $middleware = $this->middlewares[0];
+        // Get the next middleware
+        $middleware = array_shift($this->middlewares);
 
-        return $middleware->process($request, $this->controllerHandler);
+        // If there are no more middlewares, let the controller handle the request and return the response
+        if ($middleware === null) {
+            return $this->controllerHandler->handle($request);
+        }
+
+        // Inject the request object into the middleware and pass the middleware request handler to the middleware
+        return $middleware->process($request, $this);
     }
 }

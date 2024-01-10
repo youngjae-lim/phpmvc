@@ -34,17 +34,23 @@ class Dispatcher
         // Get the controller object from the container
         $controllerObj = $this->container->get($controller);
 
-        // Inject the request object into the controller
-        $controllerObj->setRequest($request);
-
         // Inject the response object into the controller
         $controllerObj->setResponse($this->container->get(Response::class));
 
         // Inject the viewer object into the controller
         $controllerObj->setViewer($this->container->get(TemplateViewerInterface::class));
 
-        // Call the controller action with the arguments
-        return $controllerObj->$action(...$args);
+        // Create a controller handler object with the controller object, action name, and arguments
+        $controllerHandler = new ControllerRequestHandler($controllerObj, $action, $args);
+
+        $middleware = $this->container->get(\App\Middleware\ChangeResponseExample::class);
+
+        $middlewareHandler = new MiddlewareRequestHandler([$middleware], $controllerHandler);
+
+        return $middlewareHandler->handle($request);
+
+        // Call the controller handler's handle method and return the response
+        // return $controllerHandler->handle($request);
     }
 
     /**

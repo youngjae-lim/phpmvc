@@ -10,6 +10,9 @@ use Framework\Response;
 
 class ChangeResponseExample
 {
+    /**
+     * Add a string to the response body
+     */
     public function process(Request $request, RequestHandlerInferface $next): Response
     {
         $response = $next->handle($request);

@@ -46,17 +46,12 @@ class Dispatcher
         // Create a controller handler object with the controller object, action name, and arguments
         $controllerHandler = new ControllerRequestHandler($controllerObj, $action, $args);
 
+        // Get the array of the middleware objects from the route params
         $middleware = $this->getMiddleware($params);
 
-        print_r($middleware);
-        exit;
-
-        $middlewareHandler = new MiddlewareRequestHandler([$middleware], $controllerHandler);
+        $middlewareHandler = new MiddlewareRequestHandler($middleware, $controllerHandler);
 
         return $middlewareHandler->handle($request);
-
-        // Call the controller handler's handle method and return the response
-        // return $controllerHandler->handle($request);
     }
 
     /**
@@ -64,11 +59,24 @@ class Dispatcher
      */
     private function getMiddleware(array $params): array
     {
+        // If there is no middleware key in the params, return an empty array
         if (! array_key_exists('middleware', $params)) {
             return [];
         }
 
+        // Split the middleware string into an array
         $middleware = explode('|', $params['middleware']);
+
+        // Loop through the middleware array and replace the value with the class name
+        array_walk($middleware, function (&$value) {
+            // If the value is not in the middlewareClasses array, throw an exception
+            if (! array_key_exists($value, $this->middlewareClasses)) {
+                throw new UnexpectedValueException("Middleware class '$value' not found in middleware config settings.");
+            }
+
+            // Look up the middleware class in the middlewareClasses array and replace the value with the class name
+            $value = $this->container->get($this->middlewareClasses[$value]);
+        });
 
         return $middleware;
     }

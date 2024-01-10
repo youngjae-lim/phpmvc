@@ -11,8 +11,11 @@ use UnexpectedValueException;
 
 class Dispatcher
 {
-    public function __construct(private Router $router, private Container $container)
-    {
+    public function __construct(
+        private Router $router,
+        private Container $container,
+        private array $middlewareClasses = []
+    ) {
     }
 
     /**
@@ -43,15 +46,31 @@ class Dispatcher
         // Create a controller handler object with the controller object, action name, and arguments
         $controllerHandler = new ControllerRequestHandler($controllerObj, $action, $args);
 
-        $middleware = $this->container->get(\App\Middleware\ChangeResponseExample::class);
-        $middleware2 = $this->container->get(\App\Middleware\ChangeRequestExample::class);
+        $middleware = $this->getMiddleware($params);
 
-        $middlewareHandler = new MiddlewareRequestHandler([$middleware2, $middleware], $controllerHandler);
+        print_r($middleware);
+        exit;
+
+        $middlewareHandler = new MiddlewareRequestHandler([$middleware], $controllerHandler);
 
         return $middlewareHandler->handle($request);
 
         // Call the controller handler's handle method and return the response
         // return $controllerHandler->handle($request);
+    }
+
+    /**
+     * Get the middleware from the route params
+     */
+    private function getMiddleware(array $params): array
+    {
+        if (! array_key_exists('middleware', $params)) {
+            return [];
+        }
+
+        $middleware = explode('|', $params['middleware']);
+
+        return $middleware;
     }
 
     /**

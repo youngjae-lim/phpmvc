@@ -41,6 +41,7 @@ class Router
                 // Get named capture group values
                 $matches = array_filter($matches, 'is_string', ARRAY_FILTER_USE_KEY);
 
+                // Merge route params with named capture group values
                 $params = array_merge($matches, $route['params']);
 
                 if (array_key_exists('method', $params)) {
